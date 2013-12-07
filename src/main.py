@@ -13,7 +13,7 @@ fpsClock = pygame.time.Clock()
 wSO = pygame.display.set_mode((640, 512))
 pygame.display.set_caption('Yo!')
                                      
-game = Game(1, 1)
+game = Game(2, 10)
     
 while True:
     wSO.fill((0,0,0))
@@ -24,6 +24,11 @@ while True:
             if event.key == K_q:
                 pygame.quit()
                 sys.exit()
+                
+            if event.key == K_n:
+                game.nextUnit()
+            if event.key == K_w:
+                game.wait()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             game.mouseEvent(event)

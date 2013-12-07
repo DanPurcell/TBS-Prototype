@@ -1,9 +1,5 @@
-from verbose import *
-
 class World:
     def __init__(self):
-        vprint("<World")
-        indent(1)
         self.tiles = [x[:] for x in [[(0,0)]*16]*16]
 
         for x in range(len(self.tiles)):
@@ -19,16 +15,6 @@ class World:
                     else:
                         self.tiles[x][y] = (29, 13)
 
-        indent(-1)
-        vprint("World>")
-                
-                        
-    def placeUnit(self, unit, pos):
-        if self.tiles[pos[0]][pos[1]] != None:
-            print pos, "occupied", unit, "not placed"
-            return
-
-        self.tiles[pos[0]][pos[1]] = unit
 
     def draw(self, SO, table):
         for x in range(len(self.tiles)):

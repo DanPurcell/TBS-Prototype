@@ -1,29 +1,25 @@
 from items import *
-from verbose import *
+from random import *
 
 class Body:
     def __init__(self):
-        vprint("<Body")
-        indent(1)
+        self.randomGear()  
+
+    def randomGear(self):
+        self.cloak = cloaks[randint(0, len(cloaks) - 1)]
+        self.body = bodies[randint(0, len(bodies) - 1)]
+        self.head = head[randint(0, len(head) - 1)]
+        self.legs = legs[randint(0, len(legs) - 1)]
+        self.boots = boots[randint(0, len(boots) - 1)]
+        self.torso = torso[randint(0, len(torso) - 1)]
+        self.hands = hands[randint(0, len(hands) - 1)]
+        self.righthand = righthand[randint(0, len(righthand) - 1)]
+        self.lefthand = lefthand[randint(0, len(lefthand) - 1)]
+        self.leftring = rings[randint(0, len(rings) - 1)]
+        self.rightring = rings[randint(0, len(rings) - 1)]
+        self.amulet = amulets[randint(0, len(amulets) - 1)]   
         
-        self.cloak = purplecloak
-        self.body = malebody
-        self.head = brownhat
-        self.legs = jeans
-        self.boots = leatherboots
-        self.torso = blackrobe
-        self.hands = leathergloves
-        self.righthand = axe
-        self.lefthand = bluebook
-        self.leftring = manaring
-        self.rightring = healthring
-        self.amulet = manaamulet
-                
-        self.slots = 3        
-
-        indent(-1)
-        vprint("Body>")
-
+        
     def getAttribute(self, at):
         r = 0
 
@@ -55,8 +51,6 @@ class Body:
         return r
 
     def draw(self, SO, table, pos):
-        vprint("<body.draw()")
-        indent(1)   
         
         if self.cloak != None:
             image = self.cloak.image                
@@ -93,8 +87,6 @@ class Body:
         if self.lefthand != None:
             image = self.lefthand.image                
             SO.blit(table[image[0]][image[1]], (pos[0]*32, pos[1]*32))
-            
-        indent(-1)
-        vprint("body.draw()>")
+       
 
 print "body.py loaded"
