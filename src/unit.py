@@ -41,6 +41,11 @@ class Unit:
             self.alive = False
             self.currenthealth = 0
 
+    def costMana(self, cost):
+        self.currentmana -= cost
+        if self.currentmana < 0.0:
+            self.currentmana = 0.0
+
     def setPos(self, pos):
         self.pos = pos
 

@@ -1,6 +1,7 @@
 import pygame
 from unit import *
 from pygame.locals import *
+from messages import *
 import math
 
 class Sidebar:
@@ -26,6 +27,29 @@ class Sidebar:
         
         SO = self.surface
         
+        m = message("Health: " + str(unit.getAttribute('Health')))
+        SO.blit(m, (0, 128))
+        m = message("Mana: " + str(unit.getAttribute('Mana')))
+        SO.blit(m, (0, 140))
+        m = message("Armor: " + str(unit.getAttribute('Armor')))
+        SO.blit(m, (0, 152))
+        m = message("MagR: " + str(unit.getAttribute('Magic Resist')))
+        SO.blit(m, (0, 164))
+        m = message("Speed: " + str(unit.getAttribute('Speed')))
+        SO.blit(m, (0, 176))
+        m = message("Range: " + str(unit.getAttribute('Range')))
+        SO.blit(m, (0, 188))
+        m = message("ArmorP: " + str(unit.getAttribute('Armorpen')))
+        SO.blit(m, (0, 200))
+        m = message("AttSpd: " + str(unit.getAttribute('Attack Speed')))
+        SO.blit(m, (0, 212))
+        m = message("Damage: " + str(unit.getAttribute('Damage')))
+        SO.blit(m, (0, 224))
+        m = message("MDamage: " + str(unit.getAttribute('Magic Damage')))
+        SO.blit(m, (0, 236))
+        m = message("Magicpen: " + str(unit.getAttribute('Magicpen')))
+        SO.blit(m, (0, 248))
+        
         body = unit.body
         
         if body.cloak != None:
@@ -34,47 +58,47 @@ class Sidebar:
                           
         if body.body != None:
             image = body.body.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 1*32))
+            SO.blit(table[image[0]][image[1]], (1*32, 0*32))
             
         if body.head != None:
             image = body.head.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 2*32))
+            SO.blit(table[image[0]][image[1]], (2*32, 0*32))
             
         if body.legs != None:
             image = body.legs.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 3*32))
+            SO.blit(table[image[0]][image[1]], (3*32, 0*32))
             
         if body.boots != None:
             image = body.boots.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 4*32))
+            SO.blit(table[image[0]][image[1]], (0*32, 1*32))
         
         if body.torso != None:
             image = body.torso.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 5*32))
+            SO.blit(table[image[0]][image[1]], (1*32, 1*32))
             
         if body.hands != None:
             image = body.hands.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 6*32))
+            SO.blit(table[image[0]][image[1]], (2*32, 1*32))
 
         if body.righthand != None:
             image = body.righthand.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 7*32))
+            SO.blit(table[image[0]][image[1]], (3*32, 1*32))
 
         if body.lefthand != None:
             image = body.lefthand.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 8*32))
+            SO.blit(table[image[0]][image[1]], (0*32, 2*32))
             
         if body.leftring != None:
             image = body.leftring.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 9*32))
+            SO.blit(table[image[0]][image[1]], (1*32, 2*32))
             
         if body.rightring != None:
             image = body.rightring.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 10*32))
+            SO.blit(table[image[0]][image[1]], (2*32, 2*32))
             
         if body.amulet != None:
             image = body.amulet.icon                
-            SO.blit(table[image[0]][image[1]], (0*32, 11*32))
+            SO.blit(table[image[0]][image[1]], (3*32, 2*32))
         
     def draw(self, SO):
         SO.blit(self.surface, (512, 0))

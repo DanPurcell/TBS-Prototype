@@ -127,16 +127,30 @@ class Game:
     def attack(self, targ):
         damage = self.selected.getAttribute('Damage')
         ap = self.selected.getAttribute('Armorpen')
-        
-        hp = targ.currenthealth
+
         armor = targ.getAttribute('Armor')
         
         ap -= armor
         ap *= 0.05
         
+        mdamage = self.selected.getAttribute('Magic Damage')
+        mpen = self.selected.getAttribute('Magicpen')
+        mresist = targ.getAttribute('Magic Resist')
+        
+        mpen -= mresist
+        mpen *= 0.05
+        
+        mdamage = mdamage + (mdamage*mpen)
+        
         damage = damage + (damage*ap)
         
-        targ.takeDamage(damage)
+        if self.selected.currentmana < mdamage:
+            mdamage = 0.0
+        else:
+            self.selected.costMana(mdamage)
+        
+        
+        targ.takeDamage(damage + mdamage)
         
         a = self.selected.getAttribute('Attack Speed')
         
@@ -144,7 +158,7 @@ class Game:
         
         self.selected.addTime(t)
         
-        print "Damage: " + str(damage)
+        print "Damage: " + str(damage) + " mod: " + str(ap) + " Magic Damage: " + str(mdamage)
         print "Act Time: " + str(t) + " Next: " + str(self.selected.atime)
     
     def getMoves(self):
