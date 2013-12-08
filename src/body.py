@@ -14,7 +14,10 @@ class Body:
         self.torso = torso[randint(0, len(torso) - 1)]
         self.hands = hands[randint(0, len(hands) - 1)]
         self.righthand = righthand[randint(0, len(righthand) - 1)]
-        self.lefthand = lefthand[randint(0, len(lefthand) - 1)]
+        if self.righthand.name.find("Bow") == -1:
+            self.lefthand = lefthand[randint(0, len(lefthand) - 1)]
+        else:  
+            self.lefthand = None
         self.leftring = rings[randint(0, len(rings) - 1)]
         self.rightring = rings[randint(0, len(rings) - 1)]
         self.amulet = amulets[randint(0, len(amulets) - 1)]   

@@ -80,7 +80,15 @@ sword = Item(({'Damage':10,
 flail = Item(({'Damage':8,
               'Attack Speed':10}), 'Flail', (14,36), (45, 28))
 
-righthand = (axe, sword, flail)
+shortbow = Item(({'Damage':5,
+              'Attack Speed':10,
+              'Range':4.0}), 'Short Bow', (57,35), (1, 30))
+
+longbow = Item(({'Damage':5,
+              'Attack Speed':-10,
+              'Range':6.0}), 'Long Bow', (58,35), (5, 30))
+
+righthand = (axe, sword, flail, shortbow, longbow)
 
 #Left Hand
 bluebook = Item(({'Slots':2,

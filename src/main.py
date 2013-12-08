@@ -13,7 +13,7 @@ fpsClock = pygame.time.Clock()
 wSO = pygame.display.set_mode((640, 512))
 pygame.display.set_caption('Yo!')
                                      
-game = Game(2, 10)
+game = Game(2, 6)
     
 while True:
     wSO.fill((0,0,0))

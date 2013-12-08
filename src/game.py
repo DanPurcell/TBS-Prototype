@@ -17,7 +17,7 @@ class Game:
             self.players.append(Player("Player" + str(i + 1), (0, 255*i, 255)))
             
             for u in range(units):
-                unit = Unit(i, (15*i, 3+u))
+                unit = Unit(i, (13*i + 1, 5+u))
                 self.units.append(unit)
 
         self.table = load_tile_table("tiles.png", 32, 32)
@@ -28,25 +28,22 @@ class Game:
            
         self.nextUnit()
         
-    def nextUnit(self):
-        atime = 99999.9
-        best = None
-        for u in range(len(self.units)):
-            if (self.units[u].atime < atime) & (self.units[u].alive):
-                best = u
-                atime = self.units[u].atime
+    def nextUnit(self):    
+        units = []
+        
+        self.units.sort(key=lambda x: x.atime, reverse=False)
+        
+        for u in self.units:
+            if u.alive:
+                units.append(u)
                 
-        if best == None:
-            print "None son"
+        if len(units) == 0:
             return None
-        
-        best = self.units[best]        
                 
-        self.selectUnit(best.pos)
-        
+        self.units = units
+                
+        self.selectUnit(self.units[0].pos)
         self.time = self.selected.atime
-        
-        print "Time: " + str(self.time)
         
     def wait(self):
         self.selected.atime += 1.0
@@ -90,7 +87,7 @@ class Game:
             if attacks != None:            
                 for a in attacks:
                     if a == tile:
-                        self.attack(self.selected, self.unitAt(tile))
+                        self.attack(self.unitAt(tile))
                         self.nextUnit()
                         return
                 
@@ -123,13 +120,13 @@ class Game:
         speed = self.selected.getAttribute('Speed')
         t = (1.0/speed) * dist
         
-        self.selected.atime += t
+        self.selected.addTime(t)
         
         print "Act Time: " + str(t) + " Next: " + str(self.selected.atime)
 
-    def attack(self, att, targ):
-        damage = att.getAttribute('Damage')
-        ap = att.getAttribute('Armorpen')
+    def attack(self, targ):
+        damage = self.selected.getAttribute('Damage')
+        ap = self.selected.getAttribute('Armorpen')
         
         hp = targ.currenthealth
         armor = targ.getAttribute('Armor')
@@ -141,14 +138,14 @@ class Game:
         
         targ.takeDamage(damage)
         
-        a = att.getAttribute('Attack Speed')
+        a = self.selected.getAttribute('Attack Speed')
         
         t = 1.0/a * 100
         
-        att.atime += t
+        self.selected.addTime(t)
         
         print "Damage: " + str(damage)
-        print "Act Time: " + str(t) + " Next: " + str(att.atime)
+        print "Act Time: " + str(t) + " Next: " + str(self.selected.atime)
     
     def getMoves(self):
         if self.selected == None:
@@ -207,7 +204,7 @@ class Game:
         
         return canmove              
              
-    def getAttacks(self):        
+    def getAttacks(self):                                             
         if self.selected == None:
             return None
         if self.selected.atime > self.time:
@@ -216,6 +213,21 @@ class Game:
         canattack = []
         
         pos = self.selected.pos
+        
+        if self.selected.getAttribute('Range') > 0.0:
+            for i in range(len(self.units)):
+                if self.units[i].owner != self.selected.owner:
+                    x1 = pos[0]
+                    y1 = pos[1]
+                    x2 = self.units[i].pos[0]
+                    y2 = self.units[i].pos[1]
+                    
+                    dist = sqrt(((x2 - x1)**2) + ((y2 - y1)**2))
+                    
+                    if dist <= self.selected.getAttribute('Range'):
+                        canattack.append(self.units[i].pos)
+                        
+            return canattack
         
         adjacent = ((0,-1),
                 (0,1),
