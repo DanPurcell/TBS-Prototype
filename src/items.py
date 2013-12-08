@@ -118,13 +118,18 @@ rings = (healthring, manaring, speedring)
 
 #Amulets
 healthamulet = Item(({'Health':5,
-                       'Health Regen':1,
-                       'Armorpen':1}), 'Health Amulet', (0, 0), (12, 20))
+                       'Health Regen':1}), 'Health Amulet', (0, 0), (12, 20))
 manaamulet = Item(({'Mana':5,
-                       'Mana Regen':2}), 'Health Amulet', (0, 0), (11, 20))
+                       'Mana Regen':2}), 'Mana Amulet', (0, 0), (11, 20))
 
-speedamulet = Item(({'Speed':1}), 'Speed Amulet', (0, 0), (8, 20))
+speedamulet = Item(({'Speed':1}), 'Speed Amulet', (0, 0), (13, 20))
 
-amulets = (healthamulet, manaamulet, speedamulet)
+armorpenamulet = Item(({'Armorpen':1}), 'Armorpen Amulet', (0, 0), (8, 20))
+
+armoramulet = Item(({'Armor':1}), 'Armor Amulet', (0, 0), (10, 20))
+
+magicresistamulet = Item(({'Magic Resist':1}), 'Magic Resist Amulet', (0, 0), (10, 20))
+
+amulets = (healthamulet, manaamulet, speedamulet, armorpenamulet, magicresistamulet)
 
 print "items.py loaded"
