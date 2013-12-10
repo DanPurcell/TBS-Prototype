@@ -49,17 +49,21 @@ class Unit:
     def setPos(self, pos):
         self.pos = pos
 
-    def draw(self, SO, table, time, color):
+    def draw(self, SO, table, time, color, pos=False):
+        
+        if pos == False:
+            pos = self.pos
+           
         #SO.blit(table[self.image[0]][self.image[1]], (self.pos[0]*32, self.pos[1]*32))
-        self.body.draw(SO, table, self.pos)
-        pygame.draw.rect(SO, color, (self.pos[0]*32 + 28, self.pos[1]*32, 4, 4))
+        self.body.draw(SO, table, pos)
+        pygame.draw.rect(SO, color, (pos[0]*32 + 28, pos[1]*32, 4, 4))
         
         hp = int((self.currenthealth/self.getAttribute('Health'))*12)
         mp = int((self.currentmana/self.getAttribute('Mana'))*12)
         
-        pygame.draw.line(SO, (255, 0, 0), (self.pos[0]*32, self.pos[1]*32 + 2), (self.pos[0]*32 + hp, self.pos[1]*32 + 2), 2)
-        pygame.draw.line(SO, (0, 0, 255), (self.pos[0]*32, self.pos[1]*32 + 4), (self.pos[0]*32 + mp, self.pos[1]*32 + 4), 2)
+        pygame.draw.line(SO, (255, 0, 0), (pos[0]*32, pos[1]*32 + 2), (pos[0]*32 + hp, pos[1]*32 + 2), 2)
+        pygame.draw.line(SO, (0, 0, 255), (pos[0]*32, pos[1]*32 + 4), (pos[0]*32 + mp, pos[1]*32 + 4), 2)
         if self.atime > time:
-            SO.blit(table[59][24], (self.pos[0]*32, self.pos[1]*32))
+            SO.blit(table[59][24], (pos[0]*32, pos[1]*32))
 
 print "unit.py loaded"

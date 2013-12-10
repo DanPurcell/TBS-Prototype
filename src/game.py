@@ -12,6 +12,9 @@ class Game:
         self.units = []
 
         self.time = 0.0
+        
+        while (units * players) >= 16:
+            units -= 1
 
         for i in range(players):
             self.players.append(Player("Player" + str(i + 1), (0, 255*i, 255)))
@@ -44,6 +47,10 @@ class Game:
                 
         self.selectUnit(self.units[0].pos)
         self.time = self.selected.atime
+        
+    def drawOrder(self, SO):
+        for i in range(len(self.units)):
+            self.units[i].draw(SO, self.table, self.time, self.players[self.units[i].owner].color, (i, 16))
         
     def wait(self):
         self.selected.atime += 1.0
@@ -306,9 +313,11 @@ class Game:
         self.sidebar.draw(SO)
 
         self.world.draw(SO, self.table)
-        for u in range(len(self.units)):
-            if self.units[u].alive:
-                self.units[u].draw(SO, self.table, self.time, self.players[self.units[u].owner].color)
+        for i in range(len(self.units)):
+            if self.units[i].alive:
+                self.units[i].draw(SO, self.table, self.time, self.players[self.units[i].owner].color)
             
+        self.drawOrder(SO)    
+        
         if self.selected != None:
             self.highlightUnit(SO)

@@ -10,7 +10,7 @@ from player import *
 pygame.init()
 fpsClock = pygame.time.Clock()
 
-wSO = pygame.display.set_mode((640, 512))
+wSO = pygame.display.set_mode((640, 544))
 pygame.display.set_caption('Yo!')
                                      
 game = Game(2, 6)
@@ -29,6 +29,8 @@ while True:
                 game.nextUnit()
             if event.key == K_w:
                 game.wait()
+            if event.key == K_g:
+                game = game = Game(2, 6)
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             game.mouseEvent(event)
