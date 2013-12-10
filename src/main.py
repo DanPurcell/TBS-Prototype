@@ -36,6 +36,12 @@ while True:
             game.mouseEvent(event)
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             game.mouseEvent(event)
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            game.mouseEvent(event)
+            print "right down"
+        elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
+            print "up down"
+            game.mouseEvent(event)
     
     pygame.display.update()
     fpsClock.tick(30)

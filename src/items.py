@@ -123,7 +123,9 @@ apenring = Item(({'Armorpen':1}), 'Armorpen Ring', (0, 0), (19, 25))
 
 mpenring = Item(({'Magicpen':1}), 'Magicpen Ring', (0, 0), (16, 25))
 
-rings = (healthring, manaring, speedring, damagering, apenring, mpenring)
+rangering = Item(({'Range':1.0}), 'Range Ring', (0, 0), (56, 25))
+
+rings = (healthring, manaring, speedring, damagering, apenring, mpenring, rangering)
 
 #Amulets
 healthamulet = Item(({'Health':5,
@@ -143,6 +145,8 @@ magicresistamulet = Item(({'Magic Resist':1}), 'Magic Resist Amulet', (0, 0), (1
 
 mpenamulet = Item(({'Magicpen':1}), 'Magicpen Amulet', (0, 0), (16, 20))
 
-amulets = (healthamulet, manaamulet, speedamulet, armorpenamulet, magicresistamulet, damageamulet, mpenamulet)
+rangeamulet = Item(({'Range':1}), 'Range Amulet', (0, 0), (17, 20))
+
+amulets = (healthamulet, manaamulet, speedamulet, armorpenamulet, magicresistamulet, damageamulet, mpenamulet, rangeamulet)
 
 print "items.py loaded"

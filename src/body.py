@@ -20,8 +20,7 @@ class Body:
             self.lefthand = None
         self.leftring = rings[randint(0, len(rings) - 1)]
         self.rightring = rings[randint(0, len(rings) - 1)]
-        self.amulet = amulets[randint(0, len(amulets) - 1)]   
-        
+        self.amulet = amulets[randint(0, len(amulets) - 1)]  
         
     def getAttribute(self, at):
         r = 0
