@@ -4,6 +4,7 @@ from player import *
 from unit import *
 from tiletable import *
 from sidebar import *
+from misc import *
 
 class Game:
     def __init__(self, players, units):
@@ -29,6 +30,8 @@ class Game:
         self.sidebar.selectUnit(None, self.table)
         
         self.selected = None
+        
+        self.attacks = None
            
         self.nextUnit()
         
@@ -71,7 +74,11 @@ class Game:
     def adjacentFriends(self):
         friends = []
         
-        
+        for f in self.listAdjacent(self.selected.pos):
+            if f.owner == self.selected.owner:
+                friends.append(f)
+
+        return friends
     
     def unitAt(self, tile):
         for u in range(len(self.units)):
@@ -80,7 +87,35 @@ class Game:
         
         return None
         
-    def mouseEvent(self, event):
+    def castBeam(self, SO):
+        for v in self.spellBeam(SO, False):
+            
+            targ = self.unitAt(v)
+
+            mdamage = self.selected.getAttribute('Magic Damage')
+            mpen = self.selected.getAttribute('Magicpen')
+            mresist = targ.getAttribute('Magic Resist')
+            
+            mpen -= mresist
+            mpen *= 0.05
+            
+            mdamage = mdamage + (mdamage*mpen)
+                    
+            targ.takeDamage(mdamage)
+            
+            print mdamage
+            
+        a = self.selected.getAttribute('Cast Speed')
+
+        t = 1.0/a * 100
+    
+        self.selected.addTime(t)        
+        
+    def castSpell(self, SO):
+        self.castBeam(SO)
+        self.nextUnit()
+        
+    def mouseEvent(self, event, SO):
         if event.type == pygame.MOUSEBUTTONDOWN:
             return
         
@@ -102,7 +137,7 @@ class Game:
                     self.nextUnit()
                     return
                     
-            attacks = self.getAttacks()
+            attacks = self.getAttacks(SO)
             
             if attacks != None:            
                 for a in attacks:
@@ -124,17 +159,17 @@ class Game:
         return None
     
     def moveSelected(self, pos):
-        x1 = self.selected.pos[0]
-        y1 = self.selected.pos[1]
-        x2 = pos[0]
-        y2 = pos[1]
+        #x1 = self.selected.pos[0]
+        #y1 = self.selected.pos[1]
+        #x2 = pos[0]
+        #y2 = pos[1]
         
-        dist = sqrt(((x2 - x1)**2) + ((y2 - y1)**2))
+        d = dist(self.selected.pos, pos)
     
         self.selected.setPos(pos)
         
         speed = self.selected.getAttribute('Speed')
-        t = (1.0/speed) * dist
+        t = (1.0/speed) * d
         
         self.selected.addTime(t)
         
@@ -160,16 +195,12 @@ class Game:
         
         damage = damage + (damage*ap)
         
-        if self.selected.currentmana < mdamage:
-            mdamage = 0.0
-        else:
-            self.selected.costMana(mdamage)
-        
+       
         
         targ.takeDamage(damage + mdamage)
         
         a = self.selected.getAttribute('Attack Speed')
-        
+
         t = 1.0/a * 100
         
         self.selected.addTime(t)
@@ -304,42 +335,7 @@ class Game:
             
         return points
              
-    def getAttacks(self):                                             
-        if self.selected == None:
-            return None
-        if self.selected.atime > self.time:
-            return []
-        
-        canattack = []
-        
-        pos = self.selected.pos
-        
-        if self.selected.body.righthand.name.find("Bow") != -1:
-            for adj in self.listAdjacent(pos):
-                if (adj.owner != self.selected.owner):
-                    return []
-            
-            for i in range(len(self.units)):
-                if self.units[i].owner != self.selected.owner:
-                    x1 = pos[0]
-                    y1 = pos[1]
-                    x2 = self.units[i].pos[0]
-                    y2 = self.units[i].pos[1]
-                    
-                    dist = sqrt(((x2 - x1)**2) + ((y2 - y1)**2))
-                    
-                    if dist <= self.selected.getAttribute('Range'):
-                        canattack.append(self.units[i].pos)
-                        
-            return canattack
-        
-        for adj in self.listAdjacent(pos):
-            if (adj.owner != self.selected.owner):
-                canattack.append(adj.pos)
-            
-        return canattack
-                 
-    def spellBeam(self, SO):
+    def spellBeam(self, SO, draw = False):
         blist = []
         
         b = pygame.Surface((32,32))
@@ -354,6 +350,8 @@ class Game:
         
         for p in self.listLine(self.selected.pos, (mp[0]/32, mp[1]/32)):
             u = self.unitAt(p)
+            if p[0] > 15 or p[1] > 15 or p[0] < 0 or p[1] < 0:
+                continue
             if u == None:
                 SO.blit(b, (p[0]*32, p[1]*32))
                 continue
@@ -363,6 +361,46 @@ class Game:
                 blist.append(p)                        
          
         return blist
+             
+    def getAttacks(self, SO):                                             
+        if self.selected == None:
+            self.attacks = None
+            return None
+        if self.selected.atime > self.time:
+            self.attacks = []
+            return
+        
+        canattack = []
+        
+        pos = self.selected.pos
+        
+        if self.selected.memorised != None:
+            if self.selected.memorised.name == "Spell Beam":   
+                self.attacks = self.spellBeam(SO, True)          
+                return
+        
+        if self.selected.body.righthand.name.find("Bow") != -1:
+            for adj in self.listAdjacent(pos):
+                if (adj.owner != self.selected.owner):
+                    self.attacks = []
+                    return
+            
+            for i in range(len(self.units)):
+                if self.units[i].owner != self.selected.owner:
+                    d = dist(pos, self.units[i].pos)
+                    
+                    if d <= self.selected.getAttribute('Range'):
+                        canattack.append(self.units[i].pos)
+                        
+            self.attacks = canattack
+            return
+        
+        for adj in self.listAdjacent(pos):
+            if (adj.owner != self.selected.owner):
+                canattack.append(adj.pos)
+    
+        self.attacks = canattack
+        return
      
     def highlightUnit(self, SO):
         #self.spellBeam(SO) #TODO+-
@@ -390,7 +428,9 @@ class Game:
             
             SO.blit(g, (p[0]*32, p[1]*32))
                              
-        for p in self.getAttacks():
+        self.getAttacks(SO)
+                             
+        for p in self.attacks:
             if p[0]>15:
                 continue
             if p[1]>15:
