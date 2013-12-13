@@ -35,6 +35,12 @@ class Game:
            
         self.nextUnit()
         
+    def advanceTime(self, time):
+        self.time = time
+        
+        for u in self.units:
+            u.update(time)
+        
     def nextUnit(self):    
         units = []
         
@@ -50,7 +56,7 @@ class Game:
         self.units = units
                 
         self.selectUnit(self.units[0].pos)
-        self.time = self.selected.atime
+        self.advanceTime(self.selected.atime)
         
     def drawOrder(self, SO):
         for i in range(len(self.units)):
@@ -112,6 +118,16 @@ class Game:
         self.selected.addTime(t)        
         
     def castSpell(self, SO):
+        if self.selected.memorised == None:
+            return
+        
+        mc = self.selected.memorised.getAttribute('Mana Cost')
+        
+        if self.selected.currentmana < mc:
+            return
+        
+        self.selected.currentmana -= mc
+        
         self.castBeam(SO)
         self.nextUnit()
         
@@ -136,11 +152,9 @@ class Game:
                     self.moveSelected(m)
                     self.nextUnit()
                     return
-                    
-            attacks = self.getAttacks(SO)
             
-            if attacks != None:            
-                for a in attacks:
+            if self.attacks != None:  
+                for a in self.attacks:
                     if a == tile:
                         self.attack(self.unitAt(tile))
                         self.nextUnit()
