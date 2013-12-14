@@ -16,8 +16,11 @@ class Body:
         self.righthand = righthand[randint(0, len(righthand) - 1)]
         if self.righthand.name.find("Bow") == -1:
             self.lefthand = lefthand[randint(0, len(lefthand) - 1)]
+            if self.lefthand.name.find("Book") != -1:
+                self.righthand = nullspell 
         else:  
-            self.lefthand = None
+            self.lefthand = None  
+        
         self.leftring = rings[randint(0, len(rings) - 1)]
         self.rightring = rings[randint(0, len(rings) - 1)]
         self.amulet = amulets[randint(0, len(amulets) - 1)]  

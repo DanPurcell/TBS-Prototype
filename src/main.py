@@ -29,19 +29,21 @@ while True:
                 game.nextUnit()
             if event.key == K_w:
                 game.wait()
+            if event.key == K_c:
+                game.castSpell(wSO)
             if event.key == K_g:
                 game = game = Game(2, 6)
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            game.mouseEvent(event)
+            game.mouseEvent(event, wSO)
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            game.mouseEvent(event)
+            game.mouseEvent(event, wSO)
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-            game.mouseEvent(event)
+            game.mouseEvent(event, wSO)
             print "right down"
         elif event.type == pygame.MOUSEBUTTONUP and event.button == 3:
             print "up down"
-            game.mouseEvent(event)
+            game.mouseEvent(event, wSO)
     
     pygame.display.update()
     fpsClock.tick(30)

@@ -92,9 +92,32 @@ class Game:
                 return self.units[u]
         
         return None
+     
+    def castStun(self):
+        if self.attacks == None:
+            return
         
+        u = self.unitAt(self.attacks[0])
+        
+        if u != None:
+            a = self.selected.getAttribute('Cast Speed')
+
+            t = 1.0/a * 100.0
+    
+            self.selected.addTime(t)
+            
+            mpen = self.selected.getAttribute('Magicpen')
+            mresist = u.getAttribute('Magic Resist')
+        
+            mpen -= mresist
+            mpen *= 0.05
+        
+            s = 1.0 + (1.0*mpen)            
+            
+            u.addTime(s)
+   
     def castBeam(self, SO):
-        for v in self.spellBeam(SO, False):
+        for v in self.spellTargetsBeam(SO, False):
             
             targ = self.unitAt(v)
 
@@ -113,11 +136,14 @@ class Game:
             
         a = self.selected.getAttribute('Cast Speed')
 
-        t = 1.0/a * 100
+        t = 1.0/a * 100.0
     
         self.selected.addTime(t)        
         
     def castSpell(self, SO):
+        if self.selected == None:
+            return
+        
         if self.selected.memorised == None:
             return
         
@@ -128,7 +154,13 @@ class Game:
         
         self.selected.currentmana -= mc
         
-        self.castBeam(SO)
+        n = self.selected.memorised.name
+        
+        if n == "Spell Beam":               
+            self.castBeam(SO)
+        elif n == "Spell Stun":
+            self.castStun()
+           
         self.nextUnit()
         
     def mouseEvent(self, event, SO):
@@ -144,7 +176,11 @@ class Game:
         
         if event.pos[0] >= 512:
             self.sidebar.mouseEvent(event)
-        else:            
+        else:       
+            if self.selected == None:
+                self.selectUnit(tile)
+                return
+            
             moves = self.getMoves()
             
             for m in moves:
@@ -153,7 +189,12 @@ class Game:
                     self.nextUnit()
                     return
             
-            if self.attacks != None:  
+            if self.selected.memorised != None:
+                self.selectUnit(tile)
+
+            self.getAttacks(SO)
+            
+            if self.attacks != None:
                 for a in self.attacks:
                     if a == tile:
                         self.attack(self.unitAt(tile))
@@ -162,7 +203,7 @@ class Game:
                 
             self.selectUnit(tile)
             
-    def selectUnit(self, tile):        
+    def selectUnit(self, tile):
         for u in range(len(self.units)):
             if self.units[u].pos == tile:
                 self.selected = self.units[u]
@@ -173,11 +214,6 @@ class Game:
         return None
     
     def moveSelected(self, pos):
-        #x1 = self.selected.pos[0]
-        #y1 = self.selected.pos[1]
-        #x2 = pos[0]
-        #y2 = pos[1]
-        
         d = dist(self.selected.pos, pos)
     
         self.selected.setPos(pos)
@@ -349,7 +385,7 @@ class Game:
             
         return points
              
-    def spellBeam(self, SO, draw = False):
+    def spellTargetsBeam(self, SO, draw = False):
         blist = []
         
         b = pygame.Surface((32,32))
@@ -375,8 +411,43 @@ class Game:
                 blist.append(p)                        
          
         return blist
+    
+    def spellTargetStun(self, SO):
+        attacks = []
+        
+        mp = pygame.mouse.get_pos()     
+        
+        b = pygame.Surface((32,32))
+        b.set_alpha(50)
+        b.fill((255,255,0))
+        
+        r = pygame.Surface((32,32))
+        r.set_alpha(50)
+        r.fill((255,0,0))
+        
+        l = self.listLine(self.selected.pos, (mp[0]/32, mp[1]/32))
+        a = []
+        
+        for p in l:
+            u = self.unitAt(p)
+            if p[0] > 15 or p[1] > 15 or p[0] < 0 or p[1] < 0:
+                continue
+            if u == None:
+                SO.blit(b, (p[0]*32, p[1]*32))
+                continue
+            else:
+                if u != self.selected:
+                    a.append(u.pos)                   
+
+        if len(a) == 0:
+            return []
+        t = a[0]
+        attacks.append(t)
+        SO.blit(r, (t[0]*32, t[1]*32))
+        
+        return attacks      
              
-    def getAttacks(self, SO):                                             
+    def getAttacks(self, SO):
         if self.selected == None:
             self.attacks = None
             return None
@@ -389,8 +460,17 @@ class Game:
         pos = self.selected.pos
         
         if self.selected.memorised != None:
+            mc = self.selected.memorised.getAttribute('Mana Cost')
+            if self.selected.currentmana < mc:
+                self.attacks = []
+                return
+            
             if self.selected.memorised.name == "Spell Beam":   
-                self.attacks = self.spellBeam(SO, True)          
+                self.attacks = self.spellTargetsBeam(SO, True)          
+                return
+            
+            if self.selected.memorised.name == "Spell Stun":   
+                self.attacks = self.spellTargetStun(SO)          
                 return
         
         if self.selected.body.righthand.name.find("Bow") != -1:
@@ -417,8 +497,6 @@ class Game:
         return
      
     def highlightUnit(self, SO):
-        #self.spellBeam(SO) #TODO+-
-        
         r = (self.selected.pos[0]*32, self.selected.pos[1]*32, 32, 32)
         pygame.draw.rect(SO, self.players[self.selected.owner].color, r, 1)
                

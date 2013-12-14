@@ -21,6 +21,8 @@ class Unit:
         self.currenthealth = self.getAttribute('Health')
         self.currentmana = self.getAttribute('Mana')
         
+        self.regentime = 0.0
+        
         self.alive = True
         
         self.atime = 0.0
@@ -28,18 +30,52 @@ class Unit:
         print self.getAttribute('Speed')
         
         self.image = (1, 31)
+        
+        self.memorised = None
+        
+        if self.body.lefthand != None:
+            if self.body.lefthand.name.find("Book") > 0:
+                self.spellbook = spellbooks[self.body.lefthand.name]
+                self.memorised = self.spellbook.spells[0]  
+                self.body.righthand = self.memorised
+                print self.memorised.name
 
     def getAttribute(self, at):
         return self.body.getAttribute(at)
 
     def addTime(self, time):
         self.atime += time
+        
+    def regen(self, time):
+        if time <= self.regentime:
+            return
+       
+        amount = time - self.regentime
+        
+        health = amount * self.getAttribute("Health Regen")
+        mana = amount * self.getAttribute("Mana Regen")
+        
+        self.currentmana += mana
+        self.currenthealth += health
+        
+        maxhealth = self.getAttribute("Health")
+        maxmana = self.getAttribute("Mana")    
+        
+        if self.currentmana > maxmana:
+            self.currentmana = maxmana
+            
+        if self.currenthealth > maxhealth:
+            self.currenthealth = maxhealth
+            
+        print health, mana
+            
+        self.regentime = time
 
     def takeDamage(self, damage):
         self.currenthealth -= damage
-        if self.currenthealth <= 0:
+        if self.currenthealth <= 0.0:
             self.alive = False
-            self.currenthealth = 0
+            self.currenthealth = 0.0
 
     def costMana(self, cost):
         self.currentmana -= cost
@@ -49,8 +85,10 @@ class Unit:
     def setPos(self, pos):
         self.pos = pos
 
+    def update(self, time):
+        self.regen(time)
+
     def draw(self, SO, table, time, color, pos=False):
-        
         if pos == False:
             pos = self.pos
            
