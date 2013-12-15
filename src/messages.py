@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 
 pygame.font.init()
-myfont = pygame.font.SysFont("Arial", 12)
+myfont = pygame.font.SysFont("Arial", 10)
 
 def message(message):
     m = myfont.render(message, 1, (255,255,255))

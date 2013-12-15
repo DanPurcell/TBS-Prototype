@@ -31,6 +31,9 @@ while True:
                 game.wait()
             if event.key == K_c:
                 game.castSpell(wSO)
+            if event.key == K_s:
+                if game.selected != None:
+                    game.selected.nextSpell()
             if event.key == K_g:
                 game = game = Game(2, 6)
                 

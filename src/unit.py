@@ -32,6 +32,7 @@ class Unit:
         self.image = (1, 31)
         
         self.memorised = None
+        self.spellindex = 0
         
         if self.body.lefthand != None:
             if self.body.lefthand.name.find("Book") > 0:
@@ -39,6 +40,21 @@ class Unit:
                 self.memorised = self.spellbook.spells[0]  
                 self.body.righthand = self.memorised
                 print self.memorised.name
+
+    def nextSpell(self):
+        if self.memorised == None:
+            return
+        
+        l = len(self.spellbook.spells)
+        
+        self.spellindex += 1
+        self.spellindex = self.spellindex % l
+        
+        self.memorised = self.spellbook.spells[self.spellindex]
+        
+        self.body.righthand = self.memorised
+        
+        print self.memorised.name
 
     def getAttribute(self, at):
         return self.body.getAttribute(at)

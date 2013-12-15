@@ -35,9 +35,14 @@ femalebody = Item(({'Health':30.0,
 bodies = (malebody, femalebody)
 
 #Cloak
-bluecloak = Item(({'Mana':1.0}), 'Blue Cloak', (22, 34), (5, 21))
+bluecloak = Item(({'Mana':1.0,
+                  'Mana Regen':1.0,
+                  'Magicpen':1.0,
+                  'Cast Speed':10}), 'Blue Cloak', (22, 34), (5, 21))
 
-purplecloak = Item(({'Attack Speed':10.0}), 'Purple Cloak', (27, 34), (6, 21))
+purplecloak = Item(({'Attack Speed':10.0,
+                     'Damage':1.0,
+                     'Armorpen':1.0}), 'Purple Cloak', (27, 34), (6, 21))
 
 cloaks = (bluecloak, purplecloak)
 
@@ -101,9 +106,11 @@ helm = Item(({'Armor':1.0}), 'Helm', (63, 40), (41, 22))
 head = (brownhat, helm)
 
 #Hands
-leathergloves = Item(({'Attack Speed':10.0}), 'Leather Gloves', (58, 34), (38, 44))
+leathergloves = Item(({'Attack Speed':10.0,
+                       'Damage':1.0}), 'Leather Gloves', (58, 34), (38, 44))
 whitegloves = Item(({'Mana Regen':1.0,
-                       'Magicpen':2.0}), 'White Gloves', (8, 35), (58, 21))
+                       'Magicpen':2.0,
+                       'Cast Speed':10}), 'White Gloves', (8, 35), (58, 21))
 
 hands = (leathergloves, whitegloves)
 #Rings
@@ -111,7 +118,9 @@ healthring = Item(({'Health':5.0,
                        'Health Regen':1.0}), 'Health Ring', (0, 0), (52, 25))
 manaring = Item(({'Mana':1.0,
                        'Mana Regen':2.0}), 'Health Ring', (0, 0), (55, 25))
-speedring = Item(({'Speed':1.0}), 'Speed Ring', (0, 0), (50, 25))
+speedring = Item(({'Attack Speed':5.0,
+                   'Speed':1.0,
+                   'Cast Speed':5.0}), 'Speed Ring', (0, 0), (50, 25))
 
 damagering = Item(({'Damage':1.0}), 'Damage Ring', (0, 0), (18, 25))
 
@@ -124,24 +133,22 @@ rangering = Item(({'Range':1.0}), 'Range Ring', (0, 0), (56, 25))
 rings = (healthring, manaring, speedring, damagering, apenring, mpenring, rangering)
 
 #Amulets
-healthamulet = Item(({'Health':5.0,
-                       'Health Regen':1.0}), 'Health Amulet', (0, 0), (12, 20))
-manaamulet = Item(({'Mana':1.0,
-                       'Mana Regen':2.0}), 'Mana Amulet', (0, 0), (11, 20))
+healthamulet = Item(({'Health':10.0}), 'Health Amulet', (0, 0), (12, 20))
+manaamulet = Item(({'Mana':5.0}), 'Mana Amulet', (0, 0), (11, 20))
 
-speedamulet = Item(({'Speed':1.0}), 'Speed Amulet', (0, 0), (13, 20))
+speedamulet = Item(({'Speed':2.0}), 'Speed Amulet', (0, 0), (13, 20))
 
-armorpenamulet = Item(({'Armorpen':1.0}), 'Armorpen Amulet', (0, 0), (8, 20))
+armorpenamulet = Item(({'Armorpen':2.0}), 'Armorpen Amulet', (0, 0), (8, 20))
 
-armoramulet = Item(({'Armor':1.0}), 'Armor Amulet', (0, 0), (10, 20))
+armoramulet = Item(({'Armor':2.0}), 'Armor Amulet', (0, 0), (10, 20))
 
-damageamulet = Item(({'Damage':1.0}), 'Damage Amulet', (0, 0), (15, 20))
+damageamulet = Item(({'Damage':2.0}), 'Damage Amulet', (0, 0), (15, 20))
 
 magicresistamulet = Item(({'Magic Resist':1.0}), 'Magic Resist Amulet', (0, 0), (10, 20))
 
-mpenamulet = Item(({'Magicpen':1.0}), 'Magicpen Amulet', (0, 0), (16, 20))
+mpenamulet = Item(({'Magicpen':2.0}), 'Magicpen Amulet', (0, 0), (16, 20))
 
-rangeamulet = Item(({'Range':1.0}), 'Range Amulet', (0, 0), (17, 20))
+rangeamulet = Item(({'Range':2.0}), 'Range Amulet', (0, 0), (17, 20))
 
 amulets = (healthamulet, manaamulet, speedamulet, armorpenamulet, magicresistamulet, damageamulet, mpenamulet, rangeamulet)
 

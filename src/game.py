@@ -5,6 +5,7 @@ from unit import *
 from tiletable import *
 from sidebar import *
 from misc import *
+from messages import *
 
 class Game:
     def __init__(self, players, units):
@@ -61,6 +62,10 @@ class Game:
     def drawOrder(self, SO):
         for i in range(len(self.units)):
             self.units[i].draw(SO, self.table, self.time, self.players[self.units[i].owner].color, (i, 16))
+            t = self.units[i].atime - self.time
+            t = "%0.2f" % t
+            m = message(str(t))
+            SO.blit(m, ((i*32) + 10, 532))
         
     def wait(self):
         if self.selected == None:
@@ -138,8 +143,8 @@ class Game:
 
         t = 1.0/a * 100.0
     
-        self.selected.addTime(t)        
-        
+        self.selected.addTime(t)          
+    
     def castSpell(self, SO):
         if self.selected == None:
             return
@@ -162,7 +167,7 @@ class Game:
             self.castStun()
            
         self.nextUnit()
-        
+            
     def mouseEvent(self, event, SO):
         if event.type == pygame.MOUSEBUTTONDOWN:
             return
@@ -412,7 +417,7 @@ class Game:
          
         return blist
     
-    def spellTargetStun(self, SO):
+    def spellTargetLOS(self, SO):
         attacks = []
         
         mp = pygame.mouse.get_pos()     
@@ -470,7 +475,7 @@ class Game:
                 return
             
             if self.selected.memorised.name == "Spell Stun":   
-                self.attacks = self.spellTargetStun(SO)          
+                self.attacks = self.spellTargetLOS(SO)          
                 return
         
         if self.selected.body.righthand.name.find("Bow") != -1:
