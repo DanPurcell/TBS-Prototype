@@ -64,7 +64,7 @@ class Game:
             self.units[i].draw(SO, self.table, self.time, self.players[self.units[i].owner].color, (i, 16))
             t = self.units[i].atime - self.time
             t = "%0.2f" % t
-            m = message(str(t))
+            m = message(str(t), (255,255,255))
             SO.blit(m, ((i*32) + 10, 532))
         
     def wait(self):
@@ -212,10 +212,11 @@ class Game:
         for u in range(len(self.units)):
             if self.units[u].pos == tile:
                 self.selected = self.units[u]
+                self.sidebar.selectUnit(self.selected, self.table)
                 
                 return
         
-        self.selected = None
+        self.sidebar.selectUnit(None, self.table)
         return None
     
     def moveSelected(self, pos):
@@ -399,6 +400,11 @@ class Game:
         
         mp = pygame.mouse.get_pos()
         
+        if mp[0] >= 512:
+            mp = (512, mp[1])
+        if mp[1] >= 512:
+            mp = (mp[0], 512)
+        
         r = pygame.Surface((32,32))
         r.set_alpha(50)
         r.fill((255,0,0))
@@ -543,8 +549,6 @@ class Game:
         self.sidebar.selectUnit(unit, self.table)
             
     def draw(self, SO):
-        self.sidebar.draw(SO)
-
         self.world.draw(SO, self.table)
         for i in range(len(self.units)):
             if self.units[i].alive:
@@ -554,3 +558,5 @@ class Game:
         
         if self.selected != None:
             self.highlightUnit(SO)
+            
+        self.sidebar.draw(SO, self.table)
