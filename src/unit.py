@@ -110,14 +110,15 @@ class Unit:
            
         #SO.blit(table[self.image[0]][self.image[1]], (self.pos[0]*32, self.pos[1]*32))
         self.body.draw(SO, table, pos)
-        pygame.draw.rect(SO, color, (pos[0]*32 + 28, pos[1]*32, 4, 4))
         
         hp = int((self.currenthealth/self.getAttribute('Health'))*12)
         mp = int((self.currentmana/self.getAttribute('Mana'))*12)
         
-        pygame.draw.line(SO, (255, 0, 0), (pos[0]*32, pos[1]*32 + 2), (pos[0]*32 + hp, pos[1]*32 + 2), 2)
-        pygame.draw.line(SO, (0, 0, 255), (pos[0]*32, pos[1]*32 + 4), (pos[0]*32 + mp, pos[1]*32 + 4), 2)
+        pygame.draw.line(SO, (255, 0, 0), (pos[0]*32, pos[1]*32 + 3), (pos[0]*32 + hp, pos[1]*32 + 3), 2)
+        pygame.draw.line(SO, (0, 0, 255), (pos[0]*32, pos[1]*32 + 5), (pos[0]*32 + mp, pos[1]*32 + 5), 2)
         if self.atime > time:
             SO.blit(table[59][24], (pos[0]*32, pos[1]*32))
+        
+        pygame.draw.rect(SO, color, (pos[0]*32, pos[1]*32, 4, 4))
 
 print "unit.py loaded"

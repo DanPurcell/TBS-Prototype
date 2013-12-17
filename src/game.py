@@ -30,6 +30,8 @@ class Game:
         self.sidebar = Sidebar()
         self.sidebar.selectUnit(None, self.table)
         
+        self.currentplayer = 0
+        
         self.selected = None
         
         self.attacks = None
@@ -52,20 +54,59 @@ class Game:
                 units.append(u)
                 
         if len(units) == 0:
-            return None
-                
+            return None           
+        
+        print units[0].owner, self.currentplayer
+        
+        if units[0].owner != self.currentplayer:
+            self.units = units
+            self.selectUnit(self.units[0].pos)
+            self.advanceTime(self.selected.atime)
+            self.nextPlayer()
+            
+            print "Next unit was owned by the next player"
+            
+            return
+        
+        best = units[0].atime
+         
+        for u in range(1, len(units)):
+            if units[u].atime == best:
+                if units[u].owner != self.currentplayer:
+                    self.units = units
+                    self.selectUnit(self.units[u].pos)
+                    self.advanceTime(self.selected.atime)
+                    self.nextPlayer()
+                    
+                    print "Next unit was owned by current player, found first from another player"
+                    
+                    return
+                 
         self.units = units
-                
         self.selectUnit(self.units[0].pos)
         self.advanceTime(self.selected.atime)
         
+        print "Had to chose a unit owned by the current player"
+        
+        return
+    
+    def nextPlayer(self):
+        self.currentplayer = (self.currentplayer + 1) % len(self.players)
+        
     def drawOrder(self, SO):
+        mp = pygame.mouse.get_pos()
+        mp = (mp[0]/32, mp[1]/32)
+        
         for i in range(len(self.units)):
             self.units[i].draw(SO, self.table, self.time, self.players[self.units[i].owner].color, (i, 16))
             t = self.units[i].atime - self.time
             t = "%0.2f" % t
             m = message(str(t), (255,255,255))
             SO.blit(m, ((i*32) + 10, 532))
+            
+            if mp == self.units[i].pos:
+                pygame.draw.rect(SO, (255,255,255), (i*32, 512, 32, 32),1)           
+            
         
     def wait(self):
         if self.selected == None:
