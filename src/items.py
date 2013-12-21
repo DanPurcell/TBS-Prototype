@@ -13,6 +13,8 @@ class Item:
         else:
             return 0.0
 
+NoItem = Item(({}), 'Nothing',(0,0),(0,0))
+
 #Body
 malebody = Item(({'Health':30.0,
               'Mana':10.0,
@@ -117,7 +119,7 @@ hands = (leathergloves, whitegloves)
 healthring = Item(({'Health':5.0,
                        'Health Regen':1.0}), 'Health Ring', (0, 0), (52, 25))
 manaring = Item(({'Mana':1.0,
-                       'Mana Regen':2.0}), 'Health Ring', (0, 0), (55, 25))
+                       'Mana Regen':2.0}), 'Mana Ring', (0, 0), (55, 25))
 speedring = Item(({'Attack Speed':5.0,
                    'Speed':1.0,
                    'Cast Speed':5.0}), 'Speed Ring', (0, 0), (50, 25))

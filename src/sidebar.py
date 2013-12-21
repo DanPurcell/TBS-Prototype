@@ -185,8 +185,8 @@ class Sidebar:
                     c = (0,200,0)
                 else:
                     c = (255,255,255)
-                r = "%0.1f" % r
-                m = message(str(r), (0,200,0))
+                rt = "%0.1f" % rt
+                m = message(str(rt), c)
                 
                 SO.blit(m, (3*32, 1*32))
 

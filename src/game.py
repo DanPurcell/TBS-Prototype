@@ -5,6 +5,7 @@ from unit import *
 from tiletable import *
 from sidebar import *
 from misc import *
+from menu import *
 from messages import *
 
 class Game:
@@ -14,6 +15,8 @@ class Game:
         self.units = []
 
         self.time = 0.0
+        
+        self.menu = None
         
         while (units * players) >= 16:
             units -= 1
@@ -105,8 +108,7 @@ class Game:
             SO.blit(m, ((i*32) + 10, 532))
             
             if mp == self.units[i].pos:
-                pygame.draw.rect(SO, (255,255,255), (i*32, 512, 32, 32),1)           
-            
+                pygame.draw.rect(SO, (255,255,255), (i*32, 512, 32, 32),1)          
         
     def wait(self):
         if self.selected == None:
@@ -170,15 +172,10 @@ class Game:
             mdamage = self.selected.getAttribute('Magic Damage')
             mpen = self.selected.getAttribute('Magicpen')
             mresist = targ.getAttribute('Magic Resist')
-            
-            mpen -= mresist
-            mpen *= 0.05
-            
-            mdamage = mdamage + (mdamage*mpen)
                     
-            targ.takeDamage(mdamage)
-            
-            print mdamage
+            d = bonusDamage(mdamage, mpen, mresist)
+                    
+            targ.takeDamage(d)
             
         a = self.selected.getAttribute('Cast Speed')
 
@@ -215,6 +212,10 @@ class Game:
         
         x, y =  event.pos
         tile = (int(math.floor(x/32)), int(math.floor(y/32)))
+        
+        if self.menu != None:
+            self.menu.mouseEvent(event, SO)
+            return
         
         if event.button == 3:
             self.sidebarUnit(self.unitAt(tile))
@@ -278,23 +279,9 @@ class Game:
 
         armor = targ.getAttribute('Armor')
         
-        ap -= armor
-        ap *= 0.05
+        d = bonusDamage(damage, ap, armor)
         
-        mdamage = self.selected.getAttribute('Magic Damage')
-        mpen = self.selected.getAttribute('Magicpen')
-        mresist = targ.getAttribute('Magic Resist')
-        
-        mpen -= mresist
-        mpen *= 0.05
-        
-        mdamage = mdamage + (mdamage*mpen)
-        
-        damage = damage + (damage*ap)
-        
-       
-        
-        targ.takeDamage(damage + mdamage)
+        targ.takeDamage(d)
         
         a = self.selected.getAttribute('Attack Speed')
 
@@ -302,7 +289,6 @@ class Game:
         
         self.selected.addTime(t)
         
-        print "Damage: " + str(damage) + " mod: " + str(ap) + " Magic Damage: " + str(mdamage)
         print "Act Time: " + str(t) + " Next: " + str(self.selected.atime)
     
     def getMoves(self):
@@ -585,11 +571,29 @@ class Game:
                 continue
             
             SO.blit(r, (p[0]*32, p[1]*32))
+            
+        if self.selected.body.righthand.name.find("Bow") != -1:
+                r = self.selected.getAttribute("Range")
+                pygame.draw.circle(SO, (100, 0, 0), (16 + self.selected.pos[0]*32, 16 + self.selected.pos[1]*32), int(r*32), 2)
       
     def sidebarUnit(self, unit):
         self.sidebar.selectUnit(unit, self.table)
             
+    def Menu(self):
+        if self.menu != None:
+            self.menu = None
+            return
+        
+        if self.selected == None:
+            return
+        
+        self.menu = Menu(self.selected)
+    
     def draw(self, SO):
+        if self.menu != None:
+            self.menu.draw(SO, self.table)
+            return        
+        
         self.world.draw(SO, self.table)
         for i in range(len(self.units)):
             if self.units[i].alive:

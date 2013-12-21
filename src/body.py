@@ -19,11 +19,25 @@ class Body:
             if self.lefthand.name.find("Book") != -1:
                 self.righthand = nullspell 
         else:  
-            self.lefthand = None  
+            self.lefthand = NoItem  
         
         self.leftring = rings[randint(0, len(rings) - 1)]
         self.rightring = rings[randint(0, len(rings) - 1)]
-        self.amulet = amulets[randint(0, len(amulets) - 1)]  
+        self.amulet = amulets[randint(0, len(amulets) - 1)]
+        
+    def listGearNames(self):
+        return (self.cloak.name,
+                self.body.name,
+                self.head.name,
+                self.legs.name,
+                self.boots.name,
+                self.torso.name,
+                self.hands.name,
+                self.righthand.name,
+                self.lefthand.name,  
+                self.leftring.name,
+                self.rightring.name,
+                self.amulet.name)
         
     def getAttribute(self, at):
         r = 0

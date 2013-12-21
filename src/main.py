@@ -35,7 +35,9 @@ while True:
                 if game.selected != None:
                     game.selected.nextSpell()
             if event.key == K_g:
-                game = game = Game(2, 6)
+                game = Game(2, 6)
+            if event.key == K_m:
+                game.Menu()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             game.mouseEvent(event, wSO)
