@@ -1,7 +1,6 @@
 Beam spell should follow through past the cursor
 
-Build a menu system.
-Properly display the selected units equipped items
+Save and Load unit presets
 
-Need to be able to manually equip units before the game begins.
+More items
 

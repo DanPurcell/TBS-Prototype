@@ -17,9 +17,7 @@ class Sidebar:
         x, y =  event.pos
         x -= 512
         tile = (int(math.floor(x/32)), int(math.floor(y/32)))
-        
-        print "Sidebar", event.pos, tile[0], tile[1]
-    
+            
     def selectUnit(self, unit, table):
         self.unit = unit        
         
@@ -57,8 +55,8 @@ class Sidebar:
         while t > 0.0:
             d = (t/h)*maxhealth
             pygame.draw.line(SO, (80, 0, 0), (d,123) ,(d,140), 1)
-            t -= 5.0
-        
+            t -= 10.0
+
         mmana = unit.getAttribute('Mana')    
         cmana = (unit.currentmana/mmana) * 128.0
         mregen = (unit.getAttribute('Mana Regen')/mmana) * 128.0
@@ -73,76 +71,18 @@ class Sidebar:
         while t > 0.0:
             d = (t/m)*128.0
             pygame.draw.line(SO, (0, 0, 80), (128 - d,135) ,(128 - d,148), 1)
-            t -= 5.0  
+            t -= 10.0  
         
-        d = unit.getAttribute("Damage")
         
-        if d > 0.0:
-            if d < 5.0:
-                r = (d/5.0)*32
-                pygame.draw.circle(SO, (180, 0, 0), (64,196), int(r))
-                
-            else:            
-                pygame.draw.circle(SO, (180, 0, 0), (64,196), 32)
-            
-            a = unit.getAttribute("Armorpen")
-            
-            if (a < d) & (a > 0.0):
-                r = (a/d)*32
-                pygame.draw.circle(SO, (255, 0, 0), (64,196), int(r))    
-
-            t = d
-            while t > 0.0:
-                r = (t/d)*32.0
-                pygame.draw.circle(SO, (80, 0, 0), (64,196), int(r), 1)
-                t -= 5.0
-            
-        d = unit.getAttribute("Magic Damage")
+        a = "%0.1f" % unit.getAttribute('Damage')  
+        b = "%0.1f" % unit.getAttribute('Armorpen')  
+        m = message(str(a) + " : " + str(b), (255,0,0))
+        SO.blit(m, (4, 150))
         
-        if d > 0.0:
-            if d < 5.0:
-                r = (d/5.0)*32
-                pygame.draw.circle(SO, (0, 0, 180), (64,260), int(r))
-                
-            else:            
-                pygame.draw.circle(SO, (0, 0, 180), (64,260), 32)
-            
-            a = unit.getAttribute("Magicpen")
-            
-            if (a < d) & (a > 0.0):
-                r = (a/d)*32
-                pygame.draw.circle(SO, (0, 0, 255), (64,260), int(r))    
-   
-            t = d
-            while t > 0.0:
-                r = (t/d)*32.0
-                pygame.draw.circle(SO, (0, 0, 80), (64,260), int(r), 1)
-                t -= 5.0
-        
-#         m = message("Health: " + str(unit.currenthealth))
-#         SO.blit(m, (0, 140))
-#         m = message("Max Mana: " + str(unit.getAttribute('Mana')))
-#         SO.blit(m, (0, 152))
-#         m = message("Mana: " + str(unit.currentmana))
-#         SO.blit(m, (0, 164))
-#         m = message("Armor: " + str(unit.getAttribute('Armor')))
-#         SO.blit(m, (0, 176))
-#         m = message("MagR: " + str(unit.getAttribute('Magic Resist')))
-#         SO.blit(m, (0, 188))
-#         m = message("Speed: " + str(unit.getAttribute('Speed')))
-#         SO.blit(m, (0, 200))
-#         m = message("Range: " + str(unit.getAttribute('Range')))
-#         SO.blit(m, (0, 212))
-#         m = message("ArmorP: " + str(unit.getAttribute('Armorpen')))
-#         SO.blit(m, (0, 224))
-#         m = message("AttSpd: " + str(unit.getAttribute('Attack Speed')))
-#         SO.blit(m, (0, 236))
-#         m = message("Damage: " + str(unit.getAttribute('Damage')))
-#         SO.blit(m, (0, 248))
-#         m = message("MDamage: " + str(unit.getAttribute('Magic Damage')))
-#         SO.blit(m, (0, 260))
-#         m = message("Magicpen: " + str(unit.getAttribute('Magicpen')))
-#         SO.blit(m, (0, 272))
+        a = "%0.1f" % unit.getAttribute('Magic Damage')  
+        b = "%0.1f" % unit.getAttribute('Magicpen')
+        m = message(str(a) + " : " + str(b), (50,50,255))
+        SO.blit(m, (4, 162))
         
         body = unit.body
         
@@ -245,7 +185,7 @@ class Sidebar:
                 nudge = 12
                 
                 for s in i[0].stats.iteritems():
-                    m = message(s[0] + ":" + str(s[1]), (255,255,255))
+                    m = message(s[0] + ": " + str(s[1]), (255,255,255))
                     SO.blit(m, (pos[0],pos[1]+nudge))
                     nudge += 12
                 
