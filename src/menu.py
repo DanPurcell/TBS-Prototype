@@ -62,6 +62,15 @@ class Menu:
     def mouseEvent(self, event, SO):
         pos = (event.pos[0]/32, event.pos[1]/32)
         
+        if pos == (16,0):
+            name = raw_input("Name: ")
+            self.unit.body.save(name)
+            return
+        if pos == (17,0):
+            name = raw_input("Name: ")
+            self.unit.body.load(name)
+            return
+        
         item = self.itemAt(pos)
         
         if item == NoItem:
@@ -237,6 +246,15 @@ class Menu:
                 x += 1
             y += 1
             x = 0
+        
+        s = pygame.Surface((32,32))
+        s.fill((255,0,0))
+        g = pygame.Surface((32,32))
+        g.fill((0,255,0))
+        
+        SO.blit(s, (512,0))
+        SO.blit(g, (544,0))
+        
         
         self.highlightEquipped(SO)    
         self.mouseover(SO)

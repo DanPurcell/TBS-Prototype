@@ -26,9 +26,7 @@ class Unit:
         self.alive = True
         
         self.atime = 0.0
-        
-        print self.getAttribute('Speed')
-        
+                
         self.image = (1, 31)
         
         self.memorised = None
@@ -39,7 +37,6 @@ class Unit:
                 self.spellbook = spellbooks[self.body.lefthand.name]
                 self.memorised = self.spellbook.spells[0]  
                 self.body.righthand = self.memorised
-                print self.memorised.name
 
     def nextSpell(self):
         if self.memorised == None:
@@ -82,9 +79,7 @@ class Unit:
             
         if self.currenthealth > maxhealth:
             self.currenthealth = maxhealth
-            
-        print health, mana
-            
+                        
         self.regentime = time
 
     def takeDamage(self, damage):
@@ -120,5 +115,7 @@ class Unit:
             SO.blit(table[59][24], (pos[0]*32, pos[1]*32))
         
         pygame.draw.rect(SO, color, (pos[0]*32, pos[1]*32, 4, 4))
+        
+    
 
 print "unit.py loaded"

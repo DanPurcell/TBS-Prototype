@@ -1,9 +1,30 @@
 from items import *
 from random import *
 
+import cPickle
+
 class Body:
-    def __init__(self):
-        self.randomGear()  
+    def __init__(self, name=None):
+        self.name = name
+        if name == None:
+            self.randomGear()
+        else:
+            self.load(name)
+    
+    def save(self, name):
+        file = open(name+".txt",'w')
+        file.write(cPickle.dumps(self.__dict__))
+        file.close()
+ 
+    def load(self, name):
+        file = open(name+".txt",'r')
+        dataPickle = file.read()
+        file.close()
+ 
+        self.__dict__ = cPickle.loads(dataPickle)
+ 
+    def __str__(self):
+        return str(self.__dict__)  
 
     def randomGear(self):
         self.cloak = cloaks[randint(0, len(cloaks) - 1)]

@@ -58,17 +58,13 @@ class Game:
                 
         if len(units) == 0:
             return None           
-        
-        print units[0].owner, self.currentplayer
-        
+                
         if units[0].owner != self.currentplayer:
             self.units = units
             self.selectUnit(self.units[0].pos)
             self.advanceTime(self.selected.atime)
             self.nextPlayer()
-            
-            print "Next unit was owned by the next player"
-            
+                        
             return
         
         best = units[0].atime
@@ -80,17 +76,13 @@ class Game:
                     self.selectUnit(self.units[u].pos)
                     self.advanceTime(self.selected.atime)
                     self.nextPlayer()
-                    
-                    print "Next unit was owned by current player, found first from another player"
-                    
+                   
                     return
                  
         self.units = units
         self.selectUnit(self.units[0].pos)
         self.advanceTime(self.selected.atime)
-        
-        print "Had to chose a unit owned by the current player"
-        
+                
         return
     
     def nextPlayer(self):
@@ -271,8 +263,6 @@ class Game:
         
         self.selected.addTime(t)
         
-        print "Act Time: " + str(t) + " Next: " + str(self.selected.atime)
-
     def attack(self, targ):
         damage = self.selected.getAttribute('Damage')
         ap = self.selected.getAttribute('Armorpen')
@@ -288,9 +278,7 @@ class Game:
         t = 1.0/a * 100
         
         self.selected.addTime(t)
-        
-        print "Act Time: " + str(t) + " Next: " + str(self.selected.atime)
-    
+            
     def getMoves(self):
         if self.selected == None:
             return []
@@ -580,7 +568,12 @@ class Game:
         self.sidebar.selectUnit(unit, self.table)
             
     def Menu(self):
+        if self.selected.atime > 0.0:
+            return
+        
         if self.menu != None:
+            self.selected.currenthealth = self.selected.getAttribute('Health')
+            self.selected.currentmana = self.selected.getAttribute('Mana')
             self.menu = None
             return
         

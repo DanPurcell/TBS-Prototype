@@ -10,15 +10,11 @@ def dist(a,b):
 
 def bonusDamage(dam, pen, res):    
     diff = res - pen
-    
-    print diff
-    
+       
     diff = 100.0/(100.0 + diff)
-        
-    print diff
 
-    dam *= diff
+    bdam = dam * diff
     
-    print dam
+    print dam, pen, res, diff, bdam
     
-    return dam
+    return bdam
